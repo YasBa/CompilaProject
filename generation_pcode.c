@@ -45,76 +45,6 @@ void afficherPCode() {
     }
 }
 
-
-
-char* MNEtoString(Mnemoniques MNE) {
-    switch (MNE)
-    {
-    case LDA:
-        return "LDA";
-        break;
-    case LDI:
-        return "LDI";
-        break;
-    case BZE:
-        return "BZE";
-        break;
-    case BRN:
-        return "BRN";
-        break;
-    case LDV:
-        return "LDV";
-        break;
-    case ADD:
-        return "ADD";
-        break;
-    case SUB:
-        return "SUB";
-        break;
-    case MUL:
-        return "MUL";
-        break;
-    case DIVI:
-        return "DIVI";
-        break;
-    case LEQ:
-        return "LEQ";
-        break;
-    case GEQ:
-        return "GEQ";
-        break;
-    case NEQ:
-        return "NEQ";
-        break;
-    case LSS:
-        return "LSS";
-        break;
-    case GTR:
-        return "GTR";
-        break;
-    case EQL:
-        return "EQL";
-        break;
-    case HLT:
-        return "HLT";
-        break;
-    case STO:
-        return "STO";
-        break;
-    case INN:
-        return "INN";
-        break;
-    case PRN:
-        return "PRN";
-        break;
-
-    default:
-        return "UNKNOWN";
-        break;
-    }
-}
-
-
 // ---------------------------------------------------------------------
 // sauvegarderPCode : Sauvegarde le P-code dans un fichier
 // ---------------------------------------------------------------------
@@ -126,10 +56,9 @@ void sauvegarderPCode(const char* filename) {
         perror("fopen");
         return;
     }
-    // fprintf(f, "%s %d\n", "INT", 0);
     for (int i = 0; i <= PC; i++) {
         // Écrit le mnémonique et l'argument de chaque instruction sur une ligne
-        fprintf(f, "%s %d\n", MNEtoString(PCODE[i].MNE), PCODE[i].SUITE);
+        fprintf(f, "%d %d\n", PCODE[i].MNE, PCODE[i].SUITE);
     }
     fclose(f);
     printf("P-code saved in %s\n", filename);

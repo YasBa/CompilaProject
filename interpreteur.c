@@ -28,14 +28,6 @@ static void INTER_INST(INSTRUCTION inst)
     // Selon le mnémonique de l'instruction, on fait différentes actions
     switch (inst.MNE)
     {
-    case INT:
-        // LDI : Pousse une valeur littérale entière sur la pile.
-        SP++;
-        if (SP >= TAILLEMEM) Error("Stack overflow INT");
-        MEM[SP].i = inst.SUITE;
-        MEM_TYPE[SP] = TYPE_INT;
-        PCi++;
-        break;
     case LDI:
         // LDI : Pousse une valeur littérale entière sur la pile.
         SP++;

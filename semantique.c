@@ -2,7 +2,7 @@
 #include "analyse_lexical.h"
 
 // Tableau global pour stocker les entrées de la table des symboles
-T_IDF TAB_IDFS[TAILLEIDFS];
+T_TAB_IDF TAB_IDFS[TAILLEIDFS];
 // Nombre d'entrées actuellement enregistrées dans la table des symboles
 int NBR_IDFS = 0;
 // Adresse globale suivante pour déclarer une variable

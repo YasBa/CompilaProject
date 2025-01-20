@@ -13,7 +13,7 @@ typedef enum {
     TTYPE,   // Identifiant est un type déclaré par l'utilisateur
     TPROC,   // Identifiant est une procédure
     TFUNC    // Identifiant est une fonction
-} TTypeIDF;  // Permet de savoir quel genre d'élément est enregistré
+} TSYM;  // Permet de savoir quel genre d'élément est enregistré
 
 // ----------------------
 // Entrée de la table des symboles
@@ -21,15 +21,15 @@ typedef enum {
 // Structure qui stocke les informations sur un identifiant
 typedef struct {
     char     Nom[32];   // Nom de l'identifiant (maximum 31 caractères + fin de chaîne)
-    TTypeIDF TIDF;      // Genre de l'identifiant (variable, constante, type, procédure ou fonction)
+    TSYM TIDF;      // Genre de l'identifiant (variable, constante, type, procédure ou fonction)
     DataType type;      // Type effectif (TYPE_INT, TYPE_REAL, etc.) pour les variables et constantes
     int      Adresse;   // Adresse en mémoire ou adresse dans le code (pour les procédures/fonctions)
     int      Value;     // Pour une constante : sa valeur entière, ou pour les proc/func : le nombre de paramètres
     float    FValue;    // Pour une constante réelle : sa valeur en float
-} T_IDF;  // Chaque entrée représente un identifiant de la table des symboles
+} T_TAB_IDF;  // Chaque entrée représente un identifiant de la table des symboles
 
 // Tableau global qui contient les entrées de la table des symboles
-extern T_IDF TAB_IDFS[TAILLEIDFS];  // Tableau des identifiants, avec une taille maximale donnée par TAILLEIDFS
+extern T_TAB_IDF TAB_IDFS[TAILLEIDFS];  // Tableau des identifiants, avec une taille maximale donnée par TAILLEIDFS
 extern int   NBR_IDFS;              // Nombre d'entrées actuellement dans la table des symboles
 extern int   OFFSET;                // Prochaine adresse mémoire globale disponible pour les variables
 

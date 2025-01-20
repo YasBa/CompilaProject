@@ -250,7 +250,7 @@ void SymSuiv()
 }
 
 // Vérifie que le token courant correspond au token attendu, puis passe au suivant
-void testSym(CODES_LEX t)
+void Test_Symbole (CODES_LEX t)
 {
     if (SYM_COUR.CODE == t) {
         symPre = SYM_COUR;  // Sauvegarde le token courant en tant que token précédent

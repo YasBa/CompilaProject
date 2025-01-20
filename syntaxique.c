@@ -64,9 +64,9 @@ static void parseArguments(int indexProcFunc);
 // ---------------------------------------------------------------------
 void Program()
 {
-    testSym(PROGRAM_TOKEN); // Doit commencer par le token "program"
-    testSym(ID_TOKEN);      // Ensuite, un identifiant (le nom du programme)
-    testSym(PV_TOKEN);      // Puis un point-virgule
+    Test_Symbole(PROGRAM_TOKEN); // Doit commencer par le token "program"
+    Test_Symbole(ID_TOKEN);      // Ensuite, un identifiant (le nom du programme)
+    Test_Symbole(PV_TOKEN);      // Puis un point-virgule
 
     // Boucle pour traiter plusieurs sections const/type/var
     while (SYM_COUR.CODE == CONST_TOKEN ||
@@ -76,15 +76,15 @@ void Program()
         switch (SYM_COUR.CODE)
         {
         case CONST_TOKEN:
-            testSym(CONST_TOKEN);
+            Test_Symbole(CONST_TOKEN);
             ConstDecl(); // Déclaration des constantes
             break;
         case TYPE_TOKEN:
-            testSym(TYPE_TOKEN);
+            Test_Symbole(TYPE_TOKEN);
             TypeDecl();  // Déclaration des types
             break;
         case VAR_TOKEN:
-            testSym(VAR_TOKEN);
+            Test_Symbole(VAR_TOKEN);
             VarDecl();   // Déclaration des variables
             break;
         default:
@@ -105,7 +105,7 @@ void Program()
 
     // Analyse le bloc principal du programme
     Bloc();
-    testSym(PT_TOKEN); // Doit terminer par un point
+    Test_Symbole(PT_TOKEN); // Doit terminer par un point
     GENERER1(HLT);     // Génère l'instruction d'arrêt (halt)
 }
 
@@ -122,15 +122,15 @@ void Bloc()
         switch (SYM_COUR.CODE)
         {
         case CONST_TOKEN:
-            testSym(CONST_TOKEN);
+            Test_Symbole(CONST_TOKEN);
             ConstDecl(); // Déclaration locale de constantes
             break;
         case TYPE_TOKEN:
-            testSym(TYPE_TOKEN);
+            Test_Symbole(TYPE_TOKEN);
             TypeDecl();  // Déclaration locale de types
             break;
         case VAR_TOKEN:
-            testSym(VAR_TOKEN);
+            Test_Symbole(VAR_TOKEN);
             VarDecl();   // Déclaration locale de variables
             break;
         default:
@@ -138,9 +138,9 @@ void Bloc()
         }
     }
 
-    testSym(BEGIN_TOKEN); // Début du bloc d'instructions (mot-clé 'begin')
+    Test_Symbole(BEGIN_TOKEN); // Début du bloc d'instructions (mot-clé 'begin')
     Insts();            // Analyse la séquence d'instructions
-    testSym(END_TOKEN); // Fin du bloc (mot-clé 'end')
+    Test_Symbole(END_TOKEN); // Fin du bloc (mot-clé 'end')
 }
 
 // ---------------------------------------------------------------------
@@ -151,7 +151,7 @@ void Insts()
     Inst(); // Analyse la première instruction
     while (SYM_COUR.CODE == PV_TOKEN) // Tant qu'il y a un point-virgule
     {
-        testSym(PV_TOKEN); // Consomme le point-virgule
+        Test_Symbole(PV_TOKEN); // Consomme le point-virgule
         if (SYM_COUR.CODE == END_TOKEN || SYM_COUR.CODE == UNTIL_TOKEN || SYM_COUR.CODE == ELSE_TOKEN)
         {
             break; // Arrête si fin du bloc ou condition d'arrêt d'une boucle/structure
@@ -174,9 +174,9 @@ void Inst()
 
     case IF_TOKEN:
     {
-        testSym(IF_TOKEN); // Consomme le token "if"
+        Test_Symbole(IF_TOKEN); // Consomme le token "if"
         Cond();            // Analyse la condition
-        testSym(THEN_TOKEN); // Attend le token "then"
+        Test_Symbole(THEN_TOKEN); // Attend le token "then"
         int jumpIf = PC + 1; // Adresse pour le saut conditionnel
         GENERER2(BZE, 0);     // Génère un branchement si la condition est fausse
         Inst();            // Analyse l'instruction du bloc "then"
@@ -185,7 +185,7 @@ void Inst()
             int jumpElse = PC + 1; // Prépare un saut pour le bloc "else"
             GENERER2(BRN, 0);       // Génère un branchement non conditionnel
             PCODE[jumpIf].SUITE = PC + 1; // Fixe la cible du saut du "then"
-            testSym(ELSE_TOKEN);   // Consomme le token "else"
+            Test_Symbole(ELSE_TOKEN);   // Consomme le token "else"
             Inst();              // Analyse le bloc "else"
             PCODE[jumpElse].SUITE = PC + 1; // Fixe la cible du saut après "else"
         }
@@ -198,10 +198,10 @@ void Inst()
 
     case WHILE_TOKEN:
     {
-        testSym(WHILE_TOKEN); // Consomme le token "while"
+        Test_Symbole(WHILE_TOKEN); // Consomme le token "while"
         int condAddr = PC + 1; // Adresse du début de la condition
         Cond();              // Analyse la condition de la boucle
-        testSym(DO_TOKEN);   // Attend le token "do"
+        Test_Symbole(DO_TOKEN);   // Attend le token "do"
         int jumpOut = PC + 1; // Adresse pour sortir de la boucle
         GENERER2(BZE, 0);     // Génère le branchement de sortie si la condition est fausse
         Inst();              // Analyse l'instruction à répéter
@@ -223,46 +223,46 @@ void Inst()
         break;
 
     case BEGIN_TOKEN:
-        testSym(BEGIN_TOKEN); // Consomme le token "begin"
+        Test_Symbole(BEGIN_TOKEN); // Consomme le token "begin"
         Insts();            // Analyse la séquence d'instructions du bloc
-        testSym(END_TOKEN);   // Consomme le token "end"
+        Test_Symbole(END_TOKEN);   // Consomme le token "end"
         break;
 
     case WRITE_TOKEN:
     {
-        testSym(WRITE_TOKEN); // Consomme "write"
-        testSym(PRG_TOKEN);   // Consomme '('
+        Test_Symbole(WRITE_TOKEN); // Consomme "write"
+        Test_Symbole(PRG_TOKEN);   // Consomme '('
         do
         {
             Exp();        // Analyse une expression à écrire
             GENERER1(PRN); // Génère l'instruction d'impression
             if (SYM_COUR.CODE == VIR_TOKEN)
-                testSym(VIR_TOKEN); // Consomme la virgule s'il y a plusieurs arguments
+                Test_Symbole(VIR_TOKEN); // Consomme la virgule s'il y a plusieurs arguments
             else
                 break;
         } while (1);
-        testSym(PRD_TOKEN); // Consomme ')'
+        Test_Symbole(PRD_TOKEN); // Consomme ')'
     }
     break;
 
     case READ_TOKEN:
     {
-        testSym(READ_TOKEN); // Consomme "read"
-        testSym(PRG_TOKEN);  // Consomme '('
+        Test_Symbole(READ_TOKEN); // Consomme "read"
+        Test_Symbole(PRG_TOKEN);  // Consomme '('
         do
         {
             char nm[32];
             strcpy(nm, SYM_COUR.nom); // Sauvegarde le nom de la variable
-            testSym(ID_TOKEN);       // Consomme l'identifiant
+            Test_Symbole(ID_TOKEN);       // Consomme l'identifiant
             int ad = getAdresse(nm); // Récupère l'adresse de la variable
             GENERER2(LDI, ad);        // Charge l'adresse en immédiat
             GENERER1(INN);            // Génère l'instruction de lecture (input)
             if (SYM_COUR.CODE == VIR_TOKEN)
-                testSym(VIR_TOKEN);  // Gère la virgule entre plusieurs variables
+                Test_Symbole(VIR_TOKEN);  // Gère la virgule entre plusieurs variables
             else
                 break;
         } while (1);
-        testSym(PRD_TOKEN); // Consomme ')'
+        Test_Symbole(PRD_TOKEN); // Consomme ')'
     }
     break;
 
@@ -282,7 +282,7 @@ void Cond()
         t == INF_TOKEN || t == INFEG_TOKEN ||
         t == SUP_TOKEN || t == SUPEG_TOKEN)
     {
-        testSym(t); // Consomme l'opérateur
+        Test_Symbole(t); // Consomme l'opérateur
         Exp();      // Analyse l'expression après l'opérateur
         switch (t)
         {
@@ -323,7 +323,7 @@ void Exp()
     while (SYM_COUR.CODE == PLUS_TOKEN || SYM_COUR.CODE == MOINS_TOKEN)
     {
         CODES_LEX t = SYM_COUR.CODE;
-        testSym(t); // Consomme l'opérateur + ou -
+        Test_Symbole(t); // Consomme l'opérateur + ou -
         Term();     // Analyse le terme suivant
         if (t == PLUS_TOKEN)
             GENERER1(ADD); // Génère l'instruction d'addition
@@ -341,7 +341,7 @@ void Term()
     while (SYM_COUR.CODE == MULTI_TOKEN || SYM_COUR.CODE == DIV_TOKEN)
     {
         CODES_LEX t = SYM_COUR.CODE;
-        testSym(t); // Consomme * ou /
+        Test_Symbole(t); // Consomme * ou /
         Fact();     // Analyse le facteur suivant
         if (t == MULTI_TOKEN)
             GENERER1(MUL); // Génère l'instruction de multiplication
@@ -361,7 +361,7 @@ void Fact()
     {
         char nm[32];
         strcpy(nm, SYM_COUR.nom); // Sauvegarde le nom de l'identifiant
-        testSym(ID_TOKEN);       // Consomme l'identifiant
+        Test_Symbole(ID_TOKEN);       // Consomme l'identifiant
 
         if (isFunction(nm))
         {
@@ -369,9 +369,9 @@ void Fact()
             int idxF = getProcFuncIndex(nm);
             if (SYM_COUR.CODE == PRG_TOKEN) // Si '(' est présent
             {
-                testSym(PRG_TOKEN);
+                Test_Symbole(PRG_TOKEN);
                 parseArguments(idxF); // Analyse les arguments
-                testSym(PRD_TOKEN);
+                Test_Symbole(PRD_TOKEN);
             }
             else
             {
@@ -451,7 +451,7 @@ void Fact()
     {
         // Nombre entier littéral
         int v = atoi(SYM_COUR.nom);
-        testSym(NUM_TOKEN);
+        Test_Symbole(NUM_TOKEN);
         GENERER2(LDI, v);
     }
     break;
@@ -460,7 +460,7 @@ void Fact()
     {
         // Nombre réel littéral
         float vf = atof(SYM_COUR.nom);
-        testSym(REAL_TOKEN);
+        Test_Symbole(REAL_TOKEN);
         int int_repr;
         memcpy(&int_repr, &vf, sizeof(float));
         GENERER2(LDF, int_repr);
@@ -469,9 +469,9 @@ void Fact()
 
     case PRG_TOKEN:
         // Expression entre parenthèses
-        testSym(PRG_TOKEN);
+        Test_Symbole(PRG_TOKEN);
         Exp();
-        testSym(PRD_TOKEN);
+        Test_Symbole(PRD_TOKEN);
         break;
 
     default:
@@ -485,10 +485,10 @@ void Fact()
 // ---------------------------------------------------------------------
 void RepeatInst()
 {
-    testSym(REPEAT_TOKEN); // Consomme "repeat"
+    Test_Symbole(REPEAT_TOKEN); // Consomme "repeat"
     int start = PC + 1;    // Position de début du bloc répété
     Insts();             // Analyse les instructions à répéter
-    testSym(UNTIL_TOKEN);  // Attend "until"
+    Test_Symbole(UNTIL_TOKEN);  // Attend "until"
     Cond();              // Analyse la condition de sortie
     GENERER2(BZE, start); // Si la condition est fausse, retourne au début du bloc
 }
@@ -498,13 +498,13 @@ void RepeatInst()
 // ---------------------------------------------------------------------
 void ForInst()
 {
-    testSym(FOR_TOKEN); // Consomme "for"
+    Test_Symbole(FOR_TOKEN); // Consomme "for"
     if (SYM_COUR.CODE != ID_TOKEN)
         Error("Identifier expected after FOR");
     char varFor[32];
     strcpy(varFor, SYM_COUR.nom); // Sauvegarde le nom de la variable de boucle
-    testSym(ID_TOKEN);
-    testSym(AFFECT_TOKEN); // Consomme ":="
+    Test_Symbole(ID_TOKEN);
+    Test_Symbole(AFFECT_TOKEN); // Consomme ":="
     Exp();               // Analyse l'expression d'initialisation
     int addrVar = getAdresse(varFor); // Récupère l'adresse de la variable de boucle
     GENERER2(STO, addrVar); // Stocke la valeur initiale dans la variable
@@ -513,12 +513,12 @@ void ForInst()
     if (SYM_COUR.CODE == TO_TOKEN)
     {
         sens = 0;         // Boucle croissante
-        testSym(TO_TOKEN);  // Consomme "to"
+        Test_Symbole(TO_TOKEN);  // Consomme "to"
     }
     else if (SYM_COUR.CODE == DOWNTO_TOKEN)
     {
         sens = 1;         // Boucle décroissante
-        testSym(DOWNTO_TOKEN); // Consomme "downto"
+        Test_Symbole(DOWNTO_TOKEN); // Consomme "downto"
     }
     else
     {
@@ -528,7 +528,7 @@ void ForInst()
     Exp(); // Analyse l'expression de la limite
     int slotFin = OFFSET++;  // Emplacement pour stocker la valeur de fin
     GENERER2(STO, slotFin);   // Stocke la limite dans le slot dédié
-    testSym(DO_TOKEN);       // Consomme "do"
+    Test_Symbole(DO_TOKEN);       // Consomme "do"
 
     int condAddr = PC + 1;   // Adresse de retour pour réévaluer la condition
     GENERER2(LDA, addrVar);   // Charge l'adresse de la variable de boucle
@@ -562,11 +562,11 @@ void ForInst()
 // ---------------------------------------------------------------------
 void CaseInst()
 {
-    testSym(CASE_TOKEN); // Consomme "case"
+    Test_Symbole(CASE_TOKEN); // Consomme "case"
     Exp();             // Analyse l'expression à comparer
     int tmpSlot = OFFSET++; // Alloue un emplacement temporaire
     GENERER2(STO, tmpSlot);  // Stocke la valeur dans le slot temporaire
-    testSym(OF_TOKEN);   // Consomme "of"
+    Test_Symbole(OF_TOKEN);   // Consomme "of"
 
     int jumpEndLabels[50]; // Tableau pour stocker les labels de fin de chaque branche
     int nEnd = 0;          // Compteur de labels de fin
@@ -575,8 +575,8 @@ void CaseInst()
     while (SYM_COUR.CODE == NUM_TOKEN)
     {
         int labelVal = atoi(SYM_COUR.nom); // Convertit le numéro de label en entier
-        testSym(NUM_TOKEN);
-        testSym(COLON_TOKEN);
+        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(COLON_TOKEN);
 
         GENERER2(LDA, tmpSlot); // Recharge la valeur stockée
         GENERER1(LDV);
@@ -592,21 +592,21 @@ void CaseInst()
         PCODE[jumpIfNot].SUITE = PC + 1; // Fixe la cible du saut si égalité non satisfaite
 
         if (SYM_COUR.CODE == PV_TOKEN)
-            testSym(PV_TOKEN); // Consomme le point-virgule si présent
+            Test_Symbole(PV_TOKEN); // Consomme le point-virgule si présent
         else
             break;
     }
     if (SYM_COUR.CODE == ELSE_TOKEN)
     {
-        testSym(ELSE_TOKEN); // Consomme "else"
+        Test_Symbole(ELSE_TOKEN); // Consomme "else"
         Inst();            // Analyse l'instruction pour la branche "else"
         int jumpAfterElse = PC + 1;
         GENERER2(BRN, 0);
         jumpEndLabels[nEnd++] = jumpAfterElse;
         if (SYM_COUR.CODE == PV_TOKEN)
-            testSym(PV_TOKEN); // Consomme le point-virgule
+            Test_Symbole(PV_TOKEN); // Consomme le point-virgule
     }
-    testSym(END_TOKEN); // Consomme "end"
+    Test_Symbole(END_TOKEN); // Consomme "end"
     int endOfCase = PC + 1; // Adresse de fin de la structure "case"
     // Fixe tous les sauts enregistrés à la fin de la structure
     for (int i = 0; i < nEnd; i++)
@@ -637,10 +637,10 @@ void ProcDecl()
 {
     initLocalParams(); // Initialise les paramètres locaux
 
-    testSym(PROCEDURE_TOKEN); // Consomme "procedure"
+    Test_Symbole(PROCEDURE_TOKEN); // Consomme "procedure"
     char procName[32];
     strcpy(procName, SYM_COUR.nom); // Enregistre le nom de la procédure
-    testSym(ID_TOKEN);
+    Test_Symbole(ID_TOKEN);
 
     if (IDexists(procName))
         Error("Procedure name already used"); // Erreur si le nom existe déjà
@@ -654,7 +654,7 @@ void ProcDecl()
     NBR_IDFS++;                          // Incrémente le nombre d'identifiants
 
     parseParamList(idx); // Analyse la liste des paramètres
-    testSym(PV_TOKEN);   // Consomme le point-virgule
+    Test_Symbole(PV_TOKEN);   // Consomme le point-virgule
 
     // Enregistre l'adresse de début du code de la procédure
     int startPC = PC + 1;
@@ -668,7 +668,7 @@ void ProcDecl()
     }
 
     Bloc();         // Analyse le bloc de la procédure
-    testSym(PV_TOKEN); // Consomme le point-virgule final
+    Test_Symbole(PV_TOKEN); // Consomme le point-virgule final
 
     // Génère l'instruction de retour avec le nombre de paramètres
     GENERER2(RET, TAB_IDFS[idx].Value);
@@ -681,10 +681,10 @@ void FuncDecl()
 {
     initLocalParams(); // Initialise les paramètres locaux
 
-    testSym(FUNCTION_TOKEN); // Consomme "function"
+    Test_Symbole(FUNCTION_TOKEN); // Consomme "function"
     char fnName[32];
     strcpy(fnName, SYM_COUR.nom); // Enregistre le nom de la fonction
-    testSym(ID_TOKEN);
+    Test_Symbole(ID_TOKEN);
 
     int idx = NBR_IDFS;      // Index pour la table des identifiants
     strcpy(TAB_IDFS[idx].Nom, fnName); // Enregistre le nom
@@ -695,10 +695,10 @@ void FuncDecl()
     NBR_IDFS++;                        // Incrémente le nombre d'identifiants
 
     parseParamList(idx);  // Analyse la liste de paramètres et met à jour TAB_IDFS[idx].Value
-    testSym(COLON_TOKEN); // Consomme ":"
+    Test_Symbole(COLON_TOKEN); // Consomme ":"
     DataType retType = parseBaseType(); // Analyse le type de retour
     TAB_IDFS[idx].type = retType;       // Enregistre le type de retour
-    testSym(PV_TOKEN);    // Consomme le point-virgule
+    Test_Symbole(PV_TOKEN);    // Consomme le point-virgule
 
     insideAFunction = 1; // Indique qu'on est dans une fonction
     strcpy(currentFunctionName, fnName); // Enregistre le nom de la fonction courante
@@ -713,7 +713,7 @@ void FuncDecl()
     }
 
     Bloc();             // Analyse le bloc de la fonction
-    testSym(PV_TOKEN);  // Consomme le point-virgule final
+    Test_Symbole(PV_TOKEN);  // Consomme le point-virgule final
 
     // Pousse la valeur résultat de la fonction (stockée en local #0) sur la pile
     GENERER2(LDL, 0);
@@ -732,13 +732,13 @@ void CallOrAssign()
 {
     char name[32];
     strcpy(name, SYM_COUR.nom); // Sauvegarde le nom de l'identifiant
-    testSym(ID_TOKEN);         // Consomme l'identifiant
+    Test_Symbole(ID_TOKEN);         // Consomme l'identifiant
 
     // Si on est dans une fonction et que l'identifiant correspond au nom de la fonction,
     // il s'agit d'une affectation au résultat de la fonction (local #0)
     if (insideAFunction && strcmp(name, currentFunctionName) == 0)
     {
-        testSym(AFFECT_TOKEN); // Consomme ":="
+        Test_Symbole(AFFECT_TOKEN); // Consomme ":="
         Exp();                 // Analyse l'expression à assigner
         GENERER2(STL, 0);       // Stocke le résultat dans le slot local #0
         return;
@@ -756,9 +756,9 @@ void CallOrAssign()
         // Analyse les arguments optionnels : soit "(...)" soit zéro argument
         if (SYM_COUR.CODE == PRG_TOKEN)
         {
-            testSym(PRG_TOKEN);
+            Test_Symbole(PRG_TOKEN);
             parseArguments(idxPF); // Analyse les arguments fournis
-            testSym(PRD_TOKEN);
+            Test_Symbole(PRD_TOKEN);
         }
         else
         {
@@ -775,7 +775,7 @@ void CallOrAssign()
     else
     {
         // Sinon, c'est une affectation de variable : "ID := exp"
-        testSym(AFFECT_TOKEN); // Consomme ":="
+        Test_Symbole(AFFECT_TOKEN); // Consomme ":="
         Exp();                 // Analyse l'expression de droite
         // Détermine si l'identifiant est un paramètre local ou une variable globale
         int localIdx = findLocalParamIndex(name);
@@ -800,7 +800,7 @@ static void parseParamList(int indexProcFunc)
     int total = 0; // Nombre total de paramètres
     if (SYM_COUR.CODE == PRG_TOKEN)
     {
-        testSym(PRG_TOKEN); // Consomme '('
+        Test_Symbole(PRG_TOKEN); // Consomme '('
         while (SYM_COUR.CODE == ID_TOKEN)
         {
             char groupIDS[10][32]; // Groupe d'identifiants pour des paramètres partagés
@@ -810,13 +810,13 @@ static void parseParamList(int indexProcFunc)
             {
                 strcpy(groupIDS[gCount], SYM_COUR.nom); // Enregistre l'identifiant
                 gCount++;
-                testSym(ID_TOKEN); // Consomme l'identifiant
+                Test_Symbole(ID_TOKEN); // Consomme l'identifiant
                 if (SYM_COUR.CODE == VIR_TOKEN)
-                    testSym(VIR_TOKEN); // Consomme la virgule
+                    Test_Symbole(VIR_TOKEN); // Consomme la virgule
                 else
                     break;
             }
-            testSym(COLON_TOKEN);   // Consomme ':'
+            Test_Symbole(COLON_TOKEN);   // Consomme ':'
             DataType ptype = parseBaseType(); // Analyse le type de base du paramètre
 
             // Enregistre chaque identifiant du groupe comme paramètre local
@@ -827,11 +827,11 @@ static void parseParamList(int indexProcFunc)
             }
 
             if (SYM_COUR.CODE == PV_TOKEN)
-                testSym(PV_TOKEN); // Consomme le point-virgule séparant les groupes
+                Test_Symbole(PV_TOKEN); // Consomme le point-virgule séparant les groupes
             else
                 break;
         }
-        testSym(PRD_TOKEN); // Consomme ')'
+        Test_Symbole(PRD_TOKEN); // Consomme ')'
     }
     TAB_IDFS[indexProcFunc].Value = total; // Stocke le nombre total de paramètres dans la table d'identifiants
 }
@@ -852,7 +852,7 @@ static void parseArguments(int indexProcFunc)
             {
                 int addr = getAdresse(SYM_COUR.nom); // Récupère l'adresse d'un paramètre
                 GENERER2(LDA, addr); // Charge l'adresse du paramètre
-                testSym(ID_TOKEN); // Consomme l'identifiant
+                Test_Symbole(ID_TOKEN); // Consomme l'identifiant
             }
             else
             {
@@ -861,7 +861,7 @@ static void parseArguments(int indexProcFunc)
             count++; // Incrémente le nombre d'arguments fournis
 
             if (SYM_COUR.CODE == VIR_TOKEN)
-                testSym(VIR_TOKEN); // Consomme la virgule séparant les arguments
+                Test_Symbole(VIR_TOKEN); // Consomme la virgule séparant les arguments
             else
                 break; // Sort de la boucle s'il n'y a plus d'arguments
         }

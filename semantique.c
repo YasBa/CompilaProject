@@ -153,36 +153,36 @@ void TypeDecl()
                 Error("Too many IDs in type alias line");
             strcpy(listIDS[n], SYM_COUR.nom);
             n++;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
             if (SYM_COUR.CODE == VIR_TOKEN)
-                testSym(VIR_TOKEN);
+                Test_Symbole(VIR_TOKEN);
             else
                 break;
         } while (SYM_COUR.CODE == ID_TOKEN);
 
-        testSym(EGAL_TOKEN); // Attend le signe '='
+        Test_Symbole(EGAL_TOKEN); // Attend le signe '='
 
         DataType d = TYPE_UNDEF;
         // Vérifie et fixe le type de base (integer, real, boolean, string)
         if (!strcmp(SYM_COUR.nom, "integer"))
         {
             d = TYPE_INT;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
         }
         else if (!strcmp(SYM_COUR.nom, "real"))
         {
             d = TYPE_REAL;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
         }
         else if (!strcmp(SYM_COUR.nom, "boolean"))
         {
             d = TYPE_BOOL;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
         }
         else if (!strcmp(SYM_COUR.nom, "string"))
         {
             d = TYPE_STRING;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
         }
         else
         {
@@ -202,7 +202,7 @@ void TypeDecl()
         }
         // Si le symbole courant est un point-virgule, le consomme, sinon sort de la boucle
         if (SYM_COUR.CODE == PV_TOKEN)
-            testSym(PV_TOKEN);
+            Test_Symbole(PV_TOKEN);
         else
             break;
     }
@@ -219,8 +219,8 @@ void ConstDecl()
     {
         char nom[32];
         strcpy(nom, SYM_COUR.nom);
-        testSym(ID_TOKEN);
-        testSym(EGAL_TOKEN);
+        Test_Symbole(ID_TOKEN);
+        Test_Symbole(EGAL_TOKEN);
 
         // Si le nom existe déjà, c'est une erreur
         if (IDexists(nom))
@@ -234,20 +234,20 @@ void ConstDecl()
         {
             TAB_IDFS[NBR_IDFS].Value = atoi(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_INT;
-            testSym(NUM_TOKEN);
+            Test_Symbole(NUM_TOKEN);
         }
         else if (SYM_COUR.CODE == REAL_TOKEN)
         {
             TAB_IDFS[NBR_IDFS].FValue = atof(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_REAL;
-            testSym(REAL_TOKEN);
+            Test_Symbole(REAL_TOKEN);
         }
         else
         {
             Error("Const must be numeric");
         }
         NBR_IDFS++;     // Incrémente le nombre d'entrées dans la table des symboles
-        testSym(PV_TOKEN); // Attend et consomme le point-virgule
+        Test_Symbole(PV_TOKEN); // Attend et consomme le point-virgule
     }
 }
 
@@ -269,9 +269,9 @@ void VarDecl()
                 Error("Too many IDs in var line");
             strcpy(listIDS[n], SYM_COUR.nom);
             n++;
-            testSym(ID_TOKEN);
+            Test_Symbole(ID_TOKEN);
             if (SYM_COUR.CODE == VIR_TOKEN)
-                testSym(VIR_TOKEN);
+                Test_Symbole(VIR_TOKEN);
             else
                 break;
         } while (SYM_COUR.CODE == ID_TOKEN);
@@ -279,11 +279,11 @@ void VarDecl()
         DataType declaredType = TYPE_INT; // Par défaut, on suppose qu'il s'agit d'un entier
         if (SYM_COUR.CODE == COLON_TOKEN)
         {
-            testSym(COLON_TOKEN);
+            Test_Symbole(COLON_TOKEN);
             declaredType = parseBaseType(); // Analyse le type de base fourni
         }
 
-        testSym(PV_TOKEN); // Attend et consomme le point-virgule
+        Test_Symbole(PV_TOKEN); // Attend et consomme le point-virgule
 
         // Pour chaque identifiant, le rajoute dans la table des symboles
         for (int i = 0; i < n; i++)
@@ -311,22 +311,22 @@ DataType parseBaseType()
 {
     if (SYM_COUR.CODE == INT_TOKEN)
     {
-        testSym(INT_TOKEN);
+        Test_Symbole(INT_TOKEN);
         return TYPE_INT;
     }
     else if (SYM_COUR.CODE == REAL_TOKEN)
     {
-        testSym(REAL_TOKEN);
+        Test_Symbole(REAL_TOKEN);
         return TYPE_REAL;
     }
     else if (SYM_COUR.CODE == BOOL_TOKEN)
     {
-        testSym(BOOL_TOKEN);
+        Test_Symbole(BOOL_TOKEN);
         return TYPE_BOOL;
     }
     else if (SYM_COUR.CODE == STRING_TOKEN)
     {
-        testSym(STRING_TOKEN);
+        Test_Symbole(STRING_TOKEN);
         return TYPE_STRING;
     }
     else

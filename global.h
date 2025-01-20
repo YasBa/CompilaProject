@@ -120,6 +120,7 @@ extern int       line_num;  // Numéro de la ligne actuellement lue
 
 // Enumération listant toutes les instructions possibles dans le P-code
 typedef enum {
+    INT,
     ADD,               // Addition
     SUB,               // Soustraction
     MUL,               // Multiplication

@@ -18,6 +18,6 @@ void SymSuiv();  // Met à jour le token courant en lisant le prochain symbole
 // Fonction qui teste si le token courant correspond au token attendu.
 // Paramètre t : le type de token attendu.
 // Si le token courant n'est pas celui attendu, elle affiche une erreur.
-void testSym(TokenType t);  // Vérifie que le token courant est bien du type spécifié
+void testSym(CODES_LEX t);  // Vérifie que le token courant est bien du type spécifié
 
 #endif

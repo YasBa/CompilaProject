@@ -142,7 +142,7 @@ int getProcFuncIndex(const char *nom)
 void TypeDecl()
 {
     // Tant que le symbole courant est un identifiant
-    while (symCour.cls == ID_TOKEN)
+    while (SYM_COUR.CODE == ID_TOKEN)
     {
         char listIDS[10][32]; // Stocke jusqu'à 10 alias dans une ligne
         int n = 0;
@@ -151,35 +151,35 @@ void TypeDecl()
         {
             if (n >= 10)
                 Error("Too many IDs in type alias line");
-            strcpy(listIDS[n], symCour.nom);
+            strcpy(listIDS[n], SYM_COUR.nom);
             n++;
             testSym(ID_TOKEN);
-            if (symCour.cls == VIR_TOKEN)
+            if (SYM_COUR.CODE == VIR_TOKEN)
                 testSym(VIR_TOKEN);
             else
                 break;
-        } while (symCour.cls == ID_TOKEN);
+        } while (SYM_COUR.CODE == ID_TOKEN);
 
         testSym(EGAL_TOKEN); // Attend le signe '='
 
         DataType d = TYPE_UNDEF;
         // Vérifie et fixe le type de base (integer, real, boolean, string)
-        if (!strcmp(symCour.nom, "integer"))
+        if (!strcmp(SYM_COUR.nom, "integer"))
         {
             d = TYPE_INT;
             testSym(ID_TOKEN);
         }
-        else if (!strcmp(symCour.nom, "real"))
+        else if (!strcmp(SYM_COUR.nom, "real"))
         {
             d = TYPE_REAL;
             testSym(ID_TOKEN);
         }
-        else if (!strcmp(symCour.nom, "boolean"))
+        else if (!strcmp(SYM_COUR.nom, "boolean"))
         {
             d = TYPE_BOOL;
             testSym(ID_TOKEN);
         }
-        else if (!strcmp(symCour.nom, "string"))
+        else if (!strcmp(SYM_COUR.nom, "string"))
         {
             d = TYPE_STRING;
             testSym(ID_TOKEN);
@@ -201,7 +201,7 @@ void TypeDecl()
             NBR_IDFS++; // Augmente le nombre d'identifiants enregistrés
         }
         // Si le symbole courant est un point-virgule, le consomme, sinon sort de la boucle
-        if (symCour.cls == PV_TOKEN)
+        if (SYM_COUR.CODE == PV_TOKEN)
             testSym(PV_TOKEN);
         else
             break;
@@ -215,10 +215,10 @@ void TypeDecl()
 void ConstDecl()
 {
     // Tant que le symbole courant est un identifiant
-    while (symCour.cls == ID_TOKEN)
+    while (SYM_COUR.CODE == ID_TOKEN)
     {
         char nom[32];
-        strcpy(nom, symCour.nom);
+        strcpy(nom, SYM_COUR.nom);
         testSym(ID_TOKEN);
         testSym(EGAL_TOKEN);
 
@@ -230,15 +230,15 @@ void ConstDecl()
         TAB_IDFS[NBR_IDFS].Adresse = -1;  // Pas d'adresse requise pour une constante
 
         // La constante doit être numérique : entier ou réel
-        if (symCour.cls == NUM_TOKEN)
+        if (SYM_COUR.CODE == NUM_TOKEN)
         {
-            TAB_IDFS[NBR_IDFS].Value = atoi(symCour.nom);
+            TAB_IDFS[NBR_IDFS].Value = atoi(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_INT;
             testSym(NUM_TOKEN);
         }
-        else if (symCour.cls == REAL_TOKEN)
+        else if (SYM_COUR.CODE == REAL_TOKEN)
         {
-            TAB_IDFS[NBR_IDFS].FValue = atof(symCour.nom);
+            TAB_IDFS[NBR_IDFS].FValue = atof(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_REAL;
             testSym(REAL_TOKEN);
         }
@@ -258,7 +258,7 @@ void ConstDecl()
 void VarDecl()
 {
     // Tant que le symbole courant est un identifiant
-    while (symCour.cls == ID_TOKEN)
+    while (SYM_COUR.CODE == ID_TOKEN)
     {
         char listIDS[10][32]; // Stocke jusqu'à 10 variables dans une ligne
         int n = 0;
@@ -267,17 +267,17 @@ void VarDecl()
         {
             if (n >= 10)
                 Error("Too many IDs in var line");
-            strcpy(listIDS[n], symCour.nom);
+            strcpy(listIDS[n], SYM_COUR.nom);
             n++;
             testSym(ID_TOKEN);
-            if (symCour.cls == VIR_TOKEN)
+            if (SYM_COUR.CODE == VIR_TOKEN)
                 testSym(VIR_TOKEN);
             else
                 break;
-        } while (symCour.cls == ID_TOKEN);
+        } while (SYM_COUR.CODE == ID_TOKEN);
 
         DataType declaredType = TYPE_INT; // Par défaut, on suppose qu'il s'agit d'un entier
-        if (symCour.cls == COLON_TOKEN)
+        if (SYM_COUR.CODE == COLON_TOKEN)
         {
             testSym(COLON_TOKEN);
             declaredType = parseBaseType(); // Analyse le type de base fourni
@@ -309,22 +309,22 @@ void VarDecl()
 // ---------------------------------------------------------------------
 DataType parseBaseType()
 {
-    if (symCour.cls == INT_TOKEN)
+    if (SYM_COUR.CODE == INT_TOKEN)
     {
         testSym(INT_TOKEN);
         return TYPE_INT;
     }
-    else if (symCour.cls == REAL_TOKEN)
+    else if (SYM_COUR.CODE == REAL_TOKEN)
     {
         testSym(REAL_TOKEN);
         return TYPE_REAL;
     }
-    else if (symCour.cls == BOOL_TOKEN)
+    else if (SYM_COUR.CODE == BOOL_TOKEN)
     {
         testSym(BOOL_TOKEN);
         return TYPE_BOOL;
     }
-    else if (symCour.cls == STRING_TOKEN)
+    else if (SYM_COUR.CODE == STRING_TOKEN)
     {
         testSym(STRING_TOKEN);
         return TYPE_STRING;

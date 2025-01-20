@@ -11,7 +11,7 @@ int PC = -1;
 // Ecrire1 : Écrit une instruction sans argument dans le tableau PCODE
 // ---------------------------------------------------------------------
 // Paramètre M : le mnémonique (instruction) à ajouter
-void Ecrire1(Mnemoniques M) {
+void GENERER1(Mnemoniques M) {
     // Vérifie qu'on n'a pas dépassé la taille maximale du tableau
     if (PC >= TAILLECODE - 1)
         Error("Too many instructions");
@@ -25,7 +25,7 @@ void Ecrire1(Mnemoniques M) {
 // ---------------------------------------------------------------------
 // Paramètre M   : le mnémonique (instruction) à ajouter
 // Paramètre arg : l'argument entier associé à l'instruction
-void Ecrire2(Mnemoniques M, int arg) {
+void GENERER2(Mnemoniques M, int arg) {
     // Vérifie qu'on n'a pas dépassé la capacité du tableau
     if (PC >= TAILLECODE - 1)
         Error("Too many instructions");

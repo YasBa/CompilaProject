@@ -100,15 +100,15 @@ typedef enum {
     STRING_TOKEN,      // Mot-clé 'string'
     DIEZE_TOKEN,       // Symbole '#' souvent utilisé pour marquer la fin
     ERREUR_TOKEN       // Token indiquant une erreur
-} TokenType; // Définit le type de chaque token dans le lexeur
+} CODES_LEX; // Définit le type de chaque token dans le lexeur
 
 // Structure représentant un token courant du compilateur
 typedef struct {
-    TokenType cls;      // Classe ou type du token
+    CODES_LEX CODE;      // Classe ou type du token
     char      nom[64];  // Nom ou valeur du token sous forme de chaîne
 } TSym_Cour; // Utilisé pour stocker le token en cours d'analyse
 
-extern TSym_Cour symCour;   // Le token actuellement analysé
+extern TSym_Cour SYM_COUR;   // Le token actuellement analysé
 extern TSym_Cour symPre;    // Le token précédent (pour suivi)
 extern FILE*     fsource;   // Pointeur vers le fichier source à compiler
 extern int       car_cour;  // Caractère courant dans le fichier source
@@ -120,6 +120,7 @@ extern int       line_num;  // Numéro de la ligne actuellement lue
 
 // Enumération listant toutes les instructions possibles dans le P-code
 typedef enum {
+    INT,
     ADD,               // Addition
     SUB,               // Soustraction
     MUL,               // Multiplication

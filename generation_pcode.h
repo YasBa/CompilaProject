@@ -7,14 +7,14 @@
 // Ecrire1 : écrit une instruction P-code sans argument
 // ---------------------------------------------------------------------
 // Paramètre M : le mnémonique (instruction) à écrire
-void Ecrire1(Mnemoniques M);
+void GENERER1(Mnemoniques M);
 
 // ---------------------------------------------------------------------
 // Ecrire2 : écrit une instruction P-code avec un argument entier
 // ---------------------------------------------------------------------
 // Paramètre M : le mnémonique (instruction) à écrire
 // Paramètre arg : l'argument entier associé à l'instruction
-void Ecrire2(Mnemoniques M, int arg);
+void GENERER2(Mnemoniques M, int arg);
 
 // ---------------------------------------------------------------------
 // afficherPCode : affiche toutes les instructions du P-code

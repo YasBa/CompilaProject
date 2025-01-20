@@ -1,7 +1,7 @@
 #include "analyse_lexical.h"
 
 // Token courant qui contient le type et la chaîne associée
-TSym_Cour symCour;       
+TSym_Cour SYM_COUR;
 
 // Token précédent, utilisé pour garder en mémoire le dernier token consommé
 TSym_Cour symPre;        
@@ -19,7 +19,7 @@ int       line_num = 1;
 void Error(const char* msg)
 {
     fprintf(stderr, "Error line %d: %s (last token: '%s')\n",
-            line_num, msg, symCour.nom);
+            line_num, msg, SYM_COUR.nom);
     exit(EXIT_FAILURE);
 }
 
@@ -63,11 +63,11 @@ static void lireNombre()
     buf[i] = '\0';  // Termine la chaîne
 
     // Copie la chaîne dans le token courant
-    strncpy(symCour.nom, buf, sizeof(symCour.nom)-1);
-    symCour.nom[sizeof(symCour.nom)-1] = '\0';
+    strncpy(SYM_COUR.nom, buf, sizeof(SYM_COUR.nom)-1);
+    SYM_COUR.nom[sizeof(SYM_COUR.nom)-1] = '\0';
 
     // Définit le type du token en fonction de la présence d'un point
-    symCour.cls = (isReal ? REAL_TOKEN : NUM_TOKEN);
+    SYM_COUR.CODE = (isReal ? REAL_TOKEN : NUM_TOKEN);
 }
 
 // Lit un mot (identifiant ou mot-clé) depuis le flux d'entrée
@@ -76,40 +76,40 @@ static void lireMot()
     int i = 0;  // Index pour construire le mot
     // Tant que le caractère est alphanumérique ou un '_' et que le buffer n'est pas plein
     while ((isalnum(car_cour) || car_cour=='_') && i < 63) {
-        symCour.nom[i++] = (char)car_cour;  // Ajoute le caractère au mot
+        SYM_COUR.nom[i++] = (char)car_cour;  // Ajoute le caractère au mot
         LireCar();  // Lit le caractère suivant
     }
-    symCour.nom[i] = '\0';  // Termine le mot par un caractère nul
-    toLowerString(symCour.nom);  // Met le mot en minuscules pour faciliter la comparaison
+    SYM_COUR.nom[i] = '\0';  // Termine le mot par un caractère nul
+    toLowerString(SYM_COUR.nom);  // Met le mot en minuscules pour faciliter la comparaison
 
     // Vérifie si le mot correspond à un mot-clé connu et définit le type du token
-    if      (!strcmp(symCour.nom, "program"))   symCour.cls = PROGRAM_TOKEN;
-    else if (!strcmp(symCour.nom, "var"))       symCour.cls = VAR_TOKEN;
-    else if (!strcmp(symCour.nom, "const"))     symCour.cls = CONST_TOKEN;
-    else if (!strcmp(symCour.nom, "type"))      symCour.cls = TYPE_TOKEN;
-    else if (!strcmp(symCour.nom, "if"))        symCour.cls = IF_TOKEN;
-    else if (!strcmp(symCour.nom, "then"))      symCour.cls = THEN_TOKEN;
-    else if (!strcmp(symCour.nom, "else"))      symCour.cls = ELSE_TOKEN;
-    else if (!strcmp(symCour.nom, "while"))     symCour.cls = WHILE_TOKEN;
-    else if (!strcmp(symCour.nom, "do"))        symCour.cls = DO_TOKEN;
-    else if (!strcmp(symCour.nom, "repeat"))    symCour.cls = REPEAT_TOKEN;
-    else if (!strcmp(symCour.nom, "until"))     symCour.cls = UNTIL_TOKEN;
-    else if (!strcmp(symCour.nom, "for"))       symCour.cls = FOR_TOKEN;
-    else if (!strcmp(symCour.nom, "to"))        symCour.cls = TO_TOKEN;
-    else if (!strcmp(symCour.nom, "downto"))    symCour.cls = DOWNTO_TOKEN;
-    else if (!strcmp(symCour.nom, "case"))      symCour.cls = CASE_TOKEN;
-    else if (!strcmp(symCour.nom, "of"))        symCour.cls = OF_TOKEN;
-    else if (!strcmp(symCour.nom, "begin"))     symCour.cls = BEGIN_TOKEN;
-    else if (!strcmp(symCour.nom, "end"))       symCour.cls = END_TOKEN;
-    else if (!strcmp(symCour.nom, "write"))     symCour.cls = WRITE_TOKEN;
-    else if (!strcmp(symCour.nom, "read"))      symCour.cls = READ_TOKEN;
-    else if (!strcmp(symCour.nom, "procedure")) symCour.cls = PROCEDURE_TOKEN;
-    else if (!strcmp(symCour.nom, "function"))  symCour.cls = FUNCTION_TOKEN;
-    else if (!strcmp(symCour.nom, "integer"))   symCour.cls = INT_TOKEN;
-    else if (!strcmp(symCour.nom, "real"))      symCour.cls = REAL_TOKEN;
-    else if (!strcmp(symCour.nom, "boolean"))   symCour.cls = BOOL_TOKEN;
-    else if (!strcmp(symCour.nom, "string"))    symCour.cls = STRING_TOKEN;
-    else                                       symCour.cls = ID_TOKEN;  // Sinon, c'est un identifiant
+    if      (!strcmp(SYM_COUR.nom, "program"))   SYM_COUR.CODE = PROGRAM_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "var"))       SYM_COUR.CODE= VAR_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "const"))     SYM_COUR.CODE= CONST_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "type"))      SYM_COUR.CODE= TYPE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "if"))        SYM_COUR.CODE= IF_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "then"))      SYM_COUR.CODE= THEN_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "else"))      SYM_COUR.CODE= ELSE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "while"))     SYM_COUR.CODE = WHILE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "do"))        SYM_COUR.CODE = DO_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "repeat"))    SYM_COUR.CODE= REPEAT_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "until"))     SYM_COUR.CODE= UNTIL_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "for"))       SYM_COUR.CODE= FOR_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "to"))        SYM_COUR.CODE= TO_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "downto"))    SYM_COUR.CODE= DOWNTO_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "case"))      SYM_COUR.CODE= CASE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "of"))        SYM_COUR.CODE= OF_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "begin"))     SYM_COUR.CODE= BEGIN_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "end"))       SYM_COUR.CODE= END_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "write"))     SYM_COUR.CODE= WRITE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "read"))      SYM_COUR.CODE= READ_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "procedure")) SYM_COUR.CODE= PROCEDURE_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "function"))  SYM_COUR.CODE= FUNCTION_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "integer"))   SYM_COUR.CODE= INT_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "real"))      SYM_COUR.CODE= REAL_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "boolean"))   SYM_COUR.CODE= BOOL_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "string"))    SYM_COUR.CODE= STRING_TOKEN;
+    else                                       SYM_COUR.CODE= ID_TOKEN;  // Sinon, c'est un identifiant
 }
 
 // Passe au prochain symbole (token) dans le flux d'entrée
@@ -122,8 +122,8 @@ void SymSuiv()
 
     // Si on atteint la fin du fichier, définit un token spécial de fin
     if (car_cour == EOF || car_cour == -1) {
-        symCour.cls = DIEZE_TOKEN;
-        strcpy(symCour.nom, "#EOF");
+        SYM_COUR.CODE = DIEZE_TOKEN;
+        strcpy(SYM_COUR.nom, "#EOF");
         return;
     }
 
@@ -139,110 +139,110 @@ void SymSuiv()
         // Sinon, c'est un symbole ou un opérateur
         switch(car_cour) {
         case '+':
-            symCour.cls = PLUS_TOKEN;
-            symCour.nom[0] = '+';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = PLUS_TOKEN;
+            SYM_COUR.nom[0] = '+';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '-':
-            symCour.cls = MOINS_TOKEN;
-            symCour.nom[0] = '-';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE= MOINS_TOKEN;
+            SYM_COUR.nom[0] = '-';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '*':
-            symCour.cls = MULTI_TOKEN;
-            symCour.nom[0] = '*';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = MULTI_TOKEN;
+            SYM_COUR.nom[0] = '*';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '/':
-            symCour.cls = DIV_TOKEN;
-            symCour.nom[0] = '/';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = DIV_TOKEN;
+            SYM_COUR.nom[0] = '/';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case ';':
-            symCour.cls = PV_TOKEN;
-            symCour.nom[0] = ';';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = PV_TOKEN;
+            SYM_COUR.nom[0] = ';';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '.':
-            symCour.cls = PT_TOKEN;
-            symCour.nom[0] = '.';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = PT_TOKEN;
+            SYM_COUR.nom[0] = '.';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '(':
-            symCour.cls = PRG_TOKEN;
-            symCour.nom[0] = '(';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = PRG_TOKEN;
+            SYM_COUR.nom[0] = '(';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case ')':
-            symCour.cls = PRD_TOKEN;
-            symCour.nom[0] = ')';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = PRD_TOKEN;
+            SYM_COUR.nom[0] = ')';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '=':
-            symCour.cls = EGAL_TOKEN;
-            symCour.nom[0] = '=';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = EGAL_TOKEN;
+            SYM_COUR.nom[0] = '=';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case ',':
-            symCour.cls = VIR_TOKEN;
-            symCour.nom[0] = ',';
-            symCour.nom[1] = '\0';
+            SYM_COUR.CODE = VIR_TOKEN;
+            SYM_COUR.nom[0] = ',';
+            SYM_COUR.nom[1] = '\0';
             LireCar();
             break;
         case '<':
             LireCar();  // Passe au caractère suivant pour vérifier le type
             if (car_cour == '=') {
-                symCour.cls = INFEG_TOKEN;
-                strcpy(symCour.nom, "<=");
+                SYM_COUR.CODE = INFEG_TOKEN;
+                strcpy(SYM_COUR.nom, "<=");
                 LireCar();
             }
             else if (car_cour == '>') {
-                symCour.cls = DIFF_TOKEN;
-                strcpy(symCour.nom, "<>");
+                SYM_COUR.CODE = DIFF_TOKEN;
+                strcpy(SYM_COUR.nom, "<>");
                 LireCar();
             }
             else {
-                symCour.cls = INF_TOKEN;
-                strcpy(symCour.nom, "<");
+                SYM_COUR.CODE = INF_TOKEN;
+                strcpy(SYM_COUR.nom, "<");
             }
             break;
         case '>':
             LireCar();
             if (car_cour == '=') {
-                symCour.cls = SUPEG_TOKEN;
-                strcpy(symCour.nom, ">=");
+                SYM_COUR.CODE = SUPEG_TOKEN;
+                strcpy(SYM_COUR.nom, ">=");
                 LireCar();
             }
             else {
-                symCour.cls = SUP_TOKEN;
-                strcpy(symCour.nom, ">");
+                SYM_COUR.CODE = SUP_TOKEN;
+                strcpy(SYM_COUR.nom, ">");
             }
             break;
         case ':':
             LireCar();
             if (car_cour == '=') {
-                symCour.cls = AFFECT_TOKEN;
-                strcpy(symCour.nom, ":=");
+                SYM_COUR.CODE = AFFECT_TOKEN;
+                strcpy(SYM_COUR.nom, ":=");
                 LireCar();
             }
             else {
-                symCour.cls = COLON_TOKEN;
-                strcpy(symCour.nom, ":");
+                SYM_COUR.CODE = COLON_TOKEN;
+                strcpy(SYM_COUR.nom, ":");
             }
             break;
         default:
             // Si aucun cas ne correspond, c'est un caractère inconnu
-            symCour.cls = ERREUR_TOKEN;
-            sprintf(symCour.nom, "%c", car_cour);
+            SYM_COUR.CODE = ERREUR_TOKEN;
+            sprintf(SYM_COUR.nom, "%c", car_cour);
             Error("Unknown character");
             break;
         }
@@ -250,15 +250,15 @@ void SymSuiv()
 }
 
 // Vérifie que le token courant correspond au token attendu, puis passe au suivant
-void testSym(TokenType t)
+void testSym(CODES_LEX t)
 {
-    if (symCour.cls == t) {
-        symPre = symCour;  // Sauvegarde le token courant en tant que token précédent
+    if (SYM_COUR.CODE == t) {
+        symPre = SYM_COUR;  // Sauvegarde le token courant en tant que token précédent
         SymSuiv();         // Passe au token suivant
     }
     else {
         char buf[128];
-        sprintf(buf, "Unexpected token. Expected %d, found %d", t, symCour.cls);
+        sprintf(buf, "Unexpected token. Expected %d, found %d", t, SYM_COUR.CODE);
         Error(buf);  // Affiche une erreur si le token ne correspond pas
     }
 }

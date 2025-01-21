@@ -1,8 +1,8 @@
-#include "global.h"
-#include "analyse_lexical.h"
-#include "syntaxique.h"
-#include "semantique.h"
-#include "generation_pcode.h"
+#include "commun.h"
+#include "analyseur_lexical.h"
+#include "analyseur_syntaxique.h"
+#include "analyseur_semantique.h"
+#include "generation_code.h"
 #include "interpreteur.h"
 
 int main(int argc, char* argv[])

@@ -1,7 +1,7 @@
 #ifndef INTERPRETEUR_H
 #define INTERPRETEUR_H
 
-#include "global.h" 
+#include "commun.h" 
 
 void INTER_PCODE();
 

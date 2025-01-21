@@ -1,7 +1,7 @@
 #include "interpreteur.h"
-#include "semantique.h"
-#include "generation_pcode.h"
-#include "global.h"
+#include "analyseur_semantique.h"
+#include "generation_code.h"
+#include "commun.h"
 
 DataValue MEM[TAILLEMEM];
 DataType  MEM_TYPE[TAILLEMEM];

@@ -113,6 +113,8 @@ void Bloc()
     }
 
     Test_Symbole(BEGIN_TOKEN);
+    PCODE[0].MNE = INT;
+    PCODE[0].SUITE = OFFSET;
     Insts();
     Test_Symbole(END_TOKEN);
 }

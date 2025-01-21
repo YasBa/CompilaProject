@@ -18,7 +18,7 @@ static void INTER_INST(INSTRUCTION inst)
     {
     case INT:
         OFFSET = SP = inst.SUITE;
-        PC++;
+        PCi++;
         break;
     case LDI:
         SP++;
@@ -200,9 +200,9 @@ static void INTER_INST(INSTRUCTION inst)
     case PRN:
         if (SP < 0) Error("Stack underflow PRN");
         if (MEM_TYPE[SP] == TYPE_REAL)
-            printf("PRN => %f\n", MEM[SP].f);
+            printf("\n%f\n", MEM[SP].f);
         else
-            printf("PRN => %d\n", MEM[SP].i);
+            printf("\n%d\n", MEM[SP].i);
         SP--;
         PCi++;
         break;
@@ -326,5 +326,5 @@ void INTER_PCODE()
     {
         INTER_INST(PCODE[PCi]);
     }
-    printf("Fin d'execution.\n");
+    printf("\nFin d'execution. (Pas d'erreurs)\n");
 }

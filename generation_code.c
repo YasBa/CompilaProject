@@ -86,7 +86,6 @@ void SaveInstToFile(FILE *FICH_SORTIE, INSTRUCTION INST)
         break;
 
     default:
-        fprintf(FICH_SORTIE, "%s \n", "ERROR");
         break;
     }
 }

@@ -18,6 +18,8 @@ int main(int argc, char* argv[])
         return 1;
     }
 
+    printf("Debut de Compilation... \n");
+
     LireCar();
     SymSuiv();
     Program();
@@ -31,7 +33,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    printf("Compilation reussie. \n");
+    printf("\nCompilation reussie. \n");
 
     if(argc > 2){
         SavePCodeToFile(argv[2]);
@@ -39,6 +41,8 @@ int main(int argc, char* argv[])
     } else {
         fclose(fsource);
     }
+
+    printf("\nDebut d'interpretation du Pseudo-code... \n");
 
     INTER_PCODE();
 

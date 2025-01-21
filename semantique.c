@@ -46,7 +46,7 @@ int getAdresse(const char *nom)
             return TAB_IDFS[i].Adresse;
         }
     }
-    Error("Variable not found");
+    Error("Variable non trouvée");
     return -1;
 }
 
@@ -100,7 +100,7 @@ int getProcFuncIndex(const char *nom)
             (TAB_IDFS[i].TIDF == TPROC || TAB_IDFS[i].TIDF == TFUNC))
             return i;
     }
-    Error("Procedure/Function not found");
+    Error("Procedure/Function non trouvée");
     return -1;
 }
 
@@ -115,7 +115,7 @@ void TypeDecl()
         do
         {
             if (n >= 10)
-                Error("Too many IDs in type alias line");
+                Error("Trop d'identifiants dans la ligne de l'alias de type");
             strcpy(listIDS[n], SYM_COUR.nom);
             n++;
             Test_Symbole(ID_TOKEN);
@@ -151,13 +151,13 @@ void TypeDecl()
         }
         else
         {
-            Error("Unknown base type in type alias");
+            Error("Type de base inconnu dans l'alias de type");
         }
 
         for (int i = 0; i < n; i++)
         {
             if (IDexists(listIDS[i]))
-                Error("Alias name already used");
+                Error("Nom d'alias déjà utilisé");
             strcpy(TAB_IDFS[NBR_IDFS].Nom, listIDS[i]);
             TAB_IDFS[NBR_IDFS].TIDF = TTYPE;
             TAB_IDFS[NBR_IDFS].type = d;
@@ -183,7 +183,7 @@ void ConstDecl()
         Test_Symbole(EGAL_TOKEN);
 
         if (IDexists(nom))
-            Error("Const name declared twice");
+            Error("Nom de constante déclaré deux fois");
         strcpy(TAB_IDFS[NBR_IDFS].Nom, nom);
         TAB_IDFS[NBR_IDFS].TIDF = TCONST;
         TAB_IDFS[NBR_IDFS].Adresse = -1;
@@ -202,7 +202,7 @@ void ConstDecl()
         }
         else
         {
-            Error("Const must be numeric");
+            Error("La constante doit être numérique");
         }
         NBR_IDFS++;
         Test_Symbole(PV_TOKEN);
@@ -220,7 +220,7 @@ void VarDecl()
         do
         {
             if (n >= 10)
-                Error("Too many IDs in var line");
+                Error("Trop d'identifiants dans la ligne de variables");
             strcpy(listIDS[n], SYM_COUR.nom);
             n++;
             Test_Symbole(ID_TOKEN);
@@ -242,13 +242,13 @@ void VarDecl()
         for (int i = 0; i < n; i++)
         {
             if (IDexists(listIDS[i]))
-                Error("Var name used");
+                Error("Nom de variable utilisé");
             strcpy(TAB_IDFS[NBR_IDFS].Nom, listIDS[i]);
             TAB_IDFS[NBR_IDFS].TIDF = TVAR;
             TAB_IDFS[NBR_IDFS].type = declaredType;
 
             TAB_IDFS[NBR_IDFS].Adresse = OFFSET++;
-            printf("Declared variable: %s, Type: %d, Address: %d\n",
+            printf("Variable déclarée: %s, Type: %d, Adresse: %d\n",
                    TAB_IDFS[NBR_IDFS].Nom, TAB_IDFS[NBR_IDFS].type, TAB_IDFS[NBR_IDFS].Adresse);
             NBR_IDFS++;
         }
@@ -279,7 +279,7 @@ DataType parseBaseType()
     }
     else
     {
-        Error("Unknown type in var declaration");
+        Error("Type inconnu dans la déclaration de variable");
         return TYPE_UNDEF;
     }
 }

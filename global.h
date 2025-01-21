@@ -92,8 +92,8 @@ typedef enum {
     PRG_TOKEN,         // Parenthèse ouvrante '('
     PRD_TOKEN,         // Parenthèse fermante ')'
     VIR_TOKEN,         // Virgule ','
-    NUM_TOKEN,         // Nombre entier
-    REAL_TOKEN,        // Nombre réel
+    ENT_TOKEN,         // Nombre entier
+    FLOAT_TOKEN,        // Nombre réel
     ID_TOKEN,          // Identifiant (nom de variable)
     INT_TOKEN,         // Mot-clé 'int'
     BOOL_TOKEN,        // Mot-clé 'bool'

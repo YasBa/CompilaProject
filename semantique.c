@@ -230,17 +230,17 @@ void ConstDecl()
         TAB_IDFS[NBR_IDFS].Adresse = -1;  // Pas d'adresse requise pour une constante
 
         // La constante doit être numérique : entier ou réel
-        if (SYM_COUR.CODE == NUM_TOKEN)
+        if (SYM_COUR.CODE == ENT_TOKEN)
         {
             TAB_IDFS[NBR_IDFS].Value = atoi(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_INT;
-            Test_Symbole(NUM_TOKEN);
+            Test_Symbole(ENT_TOKEN);
         }
-        else if (SYM_COUR.CODE == REAL_TOKEN)
+        else if (SYM_COUR.CODE == FLOAT_TOKEN)
         {
             TAB_IDFS[NBR_IDFS].FValue = atof(SYM_COUR.nom);
             TAB_IDFS[NBR_IDFS].type = TYPE_REAL;
-            Test_Symbole(REAL_TOKEN);
+            Test_Symbole(FLOAT_TOKEN);
         }
         else
         {
@@ -314,9 +314,9 @@ DataType parseBaseType()
         Test_Symbole(INT_TOKEN);
         return TYPE_INT;
     }
-    else if (SYM_COUR.CODE == REAL_TOKEN)
+    else if (SYM_COUR.CODE == FLOAT_TOKEN)
     {
-        Test_Symbole(REAL_TOKEN);
+        Test_Symbole(FLOAT_TOKEN);
         return TYPE_REAL;
     }
     else if (SYM_COUR.CODE == BOOL_TOKEN)

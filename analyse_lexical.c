@@ -18,8 +18,7 @@ int       line_num = 1;
 // Affiche une erreur avec le numéro de ligne et le token qui pose problème, puis quitte le programme
 void Error(const char* msg)
 {
-    fprintf(stderr, "Error line %d: %s (last token: '%s')\n",
-            line_num, msg, SYM_COUR.nom);
+    fprintf(stderr, "Erreur ligne %d: %s (dernier token: '%s')\n",line_num, msg, SYM_COUR.nom);
     exit(EXIT_FAILURE);
 }
 
@@ -36,50 +35,50 @@ void LireCar()
 static void toLowerString(char *s)
 {
     for(int i = 0; s[i]; i++) {
-        s[i] = (char)tolower((unsigned char)s[i]);  // Convertit chaque caractère en minuscule
+        s[i] = (char)tolower(s[i]);  // Convertit chaque caractère en minuscule
     }
 }
 
 // Lit un nombre depuis le flux (peut être un entier ou un réel)
-// Stocke le résultat dans symCour.nom et définit le type de token (NUM_TOKEN ou REAL_TOKEN)
+// Stocke le résultat dans SYM_COUR.nom et définit le type de token (NUM_TOKEN ou FLOAT_TOKEN)
 static void lireNombre()
 {
     char buf[64];   // Buffer pour construire la chaîne représentant le nombre
-    int  i = 0;     // Position actuelle dans le buffer
-    int  isReal = 0;  // Indique si le nombre contient un point (donc réel)
+    int  indice = 0;     // Position actuelle dans le buffer
+    int  isFloat = 0;  // Indique si le nombre contient un point (donc réel)
 
     // Tant que le caractère courant est un chiffre ou un point et qu'on ne dépasse pas la taille du buffer
-    while (i < 63 && (isdigit(car_cour) || car_cour == '.')) {
+    while (indice < 63 && (isdigit(car_cour) || car_cour == '.')) {
         if (car_cour == '.') {
-            if (isReal) {
+            if (isFloat) {
                 // Si un point a déjà été trouvé, on arrête la lecture
                 break;
             }
-            isReal = 1;  // Marque que c'est un réel
+            isFloat = 1;  // Marque que c'est un réel
         }
-        buf[i++] = (char)car_cour;  // Stocke le caractère dans le buffer
+        buf[indice++] = (char)car_cour;  // Stocke le caractère dans le buffer
         LireCar();  // Lit le caractère suivant
     }
-    buf[i] = '\0';  // Termine la chaîne
+    buf[indice] = '\0';  // Termine la chaîne
 
     // Copie la chaîne dans le token courant
     strncpy(SYM_COUR.nom, buf, sizeof(SYM_COUR.nom)-1);
     SYM_COUR.nom[sizeof(SYM_COUR.nom)-1] = '\0';
 
     // Définit le type du token en fonction de la présence d'un point
-    SYM_COUR.CODE = (isReal ? REAL_TOKEN : NUM_TOKEN);
+    SYM_COUR.CODE = (isFloat ? FLOAT_TOKEN : ENT_TOKEN);
 }
 
 // Lit un mot (identifiant ou mot-clé) depuis le flux d'entrée
 static void lireMot()
 {
-    int i = 0;  // Index pour construire le mot
+    int indice = 0;  // Index pour construire le mot
     // Tant que le caractère est alphanumérique ou un '_' et que le buffer n'est pas plein
-    while ((isalnum(car_cour) || car_cour=='_') && i < 63) {
-        SYM_COUR.nom[i++] = (char)car_cour;  // Ajoute le caractère au mot
+    while ((isalnum(car_cour) || car_cour=='_') && indice < 63) {
+        SYM_COUR.nom[indice++] = (char)car_cour;  // Ajoute le caractère au mot
         LireCar();  // Lit le caractère suivant
     }
-    SYM_COUR.nom[i] = '\0';  // Termine le mot par un caractère nul
+    SYM_COUR.nom[indice] = '\0';  // Termine le mot par un caractère nul
     toLowerString(SYM_COUR.nom);  // Met le mot en minuscules pour faciliter la comparaison
 
     // Vérifie si le mot correspond à un mot-clé connu et définit le type du token
@@ -106,10 +105,10 @@ static void lireMot()
     else if (!strcmp(SYM_COUR.nom, "procedure")) SYM_COUR.CODE= PROCEDURE_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "function"))  SYM_COUR.CODE= FUNCTION_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "integer"))   SYM_COUR.CODE= INT_TOKEN;
-    else if (!strcmp(SYM_COUR.nom, "real"))      SYM_COUR.CODE= REAL_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "real"))      SYM_COUR.CODE= FLOAT_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "boolean"))   SYM_COUR.CODE= BOOL_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "string"))    SYM_COUR.CODE= STRING_TOKEN;
-    else                                       SYM_COUR.CODE= ID_TOKEN;  // Sinon, c'est un identifiant
+    else                                         SYM_COUR.CODE= ID_TOKEN;  // Sinon, c'est un identifiant
 }
 
 // Passe au prochain symbole (token) dans le flux d'entrée
@@ -250,15 +249,15 @@ void SymSuiv()
 }
 
 // Vérifie que le token courant correspond au token attendu, puis passe au suivant
-void Test_Symbole (CODES_LEX t)
+void Test_Symbole (CODES_LEX cl)
 {
-    if (SYM_COUR.CODE == t) {
+    if (SYM_COUR.CODE == cl) {
         symPre = SYM_COUR;  // Sauvegarde le token courant en tant que token précédent
         SymSuiv();         // Passe au token suivant
     }
     else {
         char buf[128];
-        sprintf(buf, "Unexpected token. Expected %d, found %d", t, SYM_COUR.CODE);
+        sprintf(buf, "Unexpected token. Expected %d, found %d", cl, SYM_COUR.CODE);
         Error(buf);  // Affiche une erreur si le token ne correspond pas
     }
 }

@@ -447,20 +447,20 @@ void Fact()
     }
     break;
 
-    case NUM_TOKEN:
+    case ENT_TOKEN:
     {
         // Nombre entier littéral
         int v = atoi(SYM_COUR.nom);
-        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(ENT_TOKEN);
         GENERER2(LDI, v);
     }
     break;
 
-    case REAL_TOKEN:
+    case FLOAT_TOKEN:
     {
         // Nombre réel littéral
         float vf = atof(SYM_COUR.nom);
-        Test_Symbole(REAL_TOKEN);
+        Test_Symbole(FLOAT_TOKEN);
         int int_repr;
         memcpy(&int_repr, &vf, sizeof(float));
         GENERER2(LDF, int_repr);
@@ -572,10 +572,10 @@ void CaseInst()
     int nEnd = 0;          // Compteur de labels de fin
 
     // Traite chaque branche "valeur : instruction"
-    while (SYM_COUR.CODE == NUM_TOKEN)
+    while (SYM_COUR.CODE == ENT_TOKEN)
     {
         int labelVal = atoi(SYM_COUR.nom); // Convertit le numéro de label en entier
-        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(ENT_TOKEN);
         Test_Symbole(COLON_TOKEN);
 
         GENERER2(LDA, tmpSlot); // Recharge la valeur stockée

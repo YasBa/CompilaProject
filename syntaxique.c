@@ -335,12 +335,8 @@ void Fact()
         }
         else if (isProcedure(nm))
         {
-<<<<<<< HEAD
-            Error("Cannot call a procedure in an expression context");
-=======
             // En Pascal, on ne peut pas appeler une procédure dans une expression
             Error("Impossible d'appeler une procédure dans un contexte d'expression");
->>>>>>> d2ee875ffcd679402f58d31a485fff20d72e7d01
         }
         else
         {

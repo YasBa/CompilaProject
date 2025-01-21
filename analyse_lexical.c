@@ -227,12 +227,7 @@ void Test_Symbole (CODES_LEX cl)
     }
     else {
         char buf[128];
-<<<<<<< HEAD
-        sprintf(buf, "Unexpected token. Expected %d, found %d", cl, SYM_COUR.CODE);
-        Error(buf);
-=======
         sprintf(buf, "Jeton inattendu. Attendu %d, trouvé %d", cl, SYM_COUR.CODE);
         Error(buf);  // Affiche une erreur si le token ne correspond pas
->>>>>>> d2ee875ffcd679402f58d31a485fff20d72e7d01
     }
 }

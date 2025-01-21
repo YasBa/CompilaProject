@@ -26,17 +26,9 @@ typedef union
     float f;
 } DataValue;
 
-// -------------------------------
-// Variables globales et tableaux
-// -------------------------------
-
-// Tableau global pour stocker les valeurs (mémoire du programme)
 extern DataValue MEM[TAILLEMEM];
-// Tableau qui définit le type de chaque élément dans MEM
 extern DataType MEM_TYPE[TAILLEMEM];
-// Pointeur de pile (indique le sommet de la pile)
 extern int SP;
-// Pointeur de base pour les appels de fonctions/procédures
 extern int BP;
 
 typedef enum
@@ -90,66 +82,58 @@ typedef enum
     ERREUR_TOKEN
 } CODES_LEX;
 
-// Structure représentant un token courant du compilateur
 typedef struct
 {
-    CODES_LEX CODE; // Classe ou type du token
-    char nom[64];   // Nom ou valeur du token sous forme de chaîne
-} TSym_Cour;        // Utilisé pour stocker le token en cours d'analyse
+    CODES_LEX CODE;
+    char nom[64];
+} TSym_Cour;
 
-extern TSym_Cour SYM_COUR; // Le token actuellement analysé
-extern TSym_Cour symPre;   // Le token précédent (pour suivi)
-extern FILE *fsource;      // Pointeur vers le fichier source à compiler
-extern int car_cour;       // Caractère courant dans le fichier source
-extern int line_num;       // Numéro de la ligne actuellement lue
+extern TSym_Cour SYM_COUR;
+extern TSym_Cour symPre;
+extern FILE *fsource;
+extern int car_cour;
+extern int line_num;
 
-// -------------------------------
-// Définition des instructions du P-code
-// -------------------------------
-
-// Enumération listant toutes les instructions possibles dans le P-code
 typedef enum
 {
     INT,
-    ADD,              // Addition
-    SUB,              // Soustraction
-    MUL,              // Multiplication
-    DIVI,             // Division entière
-    EQL,              // Égalité (==)
-    NEQ,              // Différence (!=)
-    GTR,              // Plus grand que (>)
-    LSS,              // Plus petit que (<)
-    GEQ,              // Supérieur ou égal (>=)
-    LEQ,              // Inférieur ou égal (<=)
-    PRN,              // Instruction d'impression (print)
-    INN,              // Instruction de saisie (input)
-    LDI,              // Charger une valeur immédiate (literal)
-    LDA,              // Charger une adresse
-    LDV,              // Charger la valeur depuis une adresse
-    STO,              // Stocker une valeur dans une adresse
-    BRN,              // Branchement inconditionnel (jump)
-    BZE,              // Branchement conditionnel si zéro (if zero, jump)
-    HLT,              // Arrêter le programme (halt)
-    CALL,             // Appel d'une procédure ou fonction (call)
-    RET,              // Retour d'une procédure ou fonction (return)
-    LDL,              // Charger une variable locale
-    STL,              // Stocker dans une variable locale
-    LDF,              // Charger une fonction
-    STO_IND,          // Stocker via une adresse indirecte
-    PUSH_PARAMS_COUNT // Pousser le nombre de paramètres sur la pile
-} Mnemoniques;        // Définit toutes les opérations possibles en P-code
+    ADD,
+    SUB,
+    MUL,
+    DIVI,
+    EQL,
+    NEQ,
+    GTR,
+    LSS,
+    GEQ,
+    LEQ,
+    PRN,
+    INN,
+    LDI,
+    LDA,
+    LDV,
+    STO,
+    BRN,
+    BZE,
+    HLT,
+    CALL,
+    RET,
+    LDL,
+    STL,
+    LDF,
+    STO_IND,
+    PUSH_PARAMS_COUNT
+} Mnemoniques;
 
-// Structure qui représente une instruction du P-code
 typedef struct
 {
-    Mnemoniques MNE; // Le mnémonique (opération) de l'instruction
-    int SUITE;       // L'argument ou suite d'instruction associé
-} INSTRUCTION;       // Utilisé pour créer chaque instruction du P-code
+    Mnemoniques MNE;
+    int SUITE;
+} INSTRUCTION;
 
-extern INSTRUCTION PCODE[TAILLECODE]; // Tableau global contenant les instructions du P-code
-extern int PC;                        // Compteur ou pointeur courant dans le tableau PCODE
+extern INSTRUCTION PCODE[TAILLECODE];
+extern int PC;
 
-// Déclaration d'une fonction pour afficher une erreur et peut-être arrêter le programme
-void Error(const char *msg); // Affiche le message d'erreur passé en paramètre
+void Error(const char *msg);
 
 #endif

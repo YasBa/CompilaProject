@@ -567,7 +567,7 @@ void ProcDecl()
     Test_Symbole(ID_TOKEN);
 
     if (IDexists(procName))
-        Error("Procedure name already used");
+        Error("Nom de procedure deja utilise");
     int idx = NBR_IDFS;
 
     strcpy(TAB_IDFS[idx].Nom, procName);

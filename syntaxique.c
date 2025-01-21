@@ -267,7 +267,7 @@ void Inst()
     break;
 
     default:
-        Error("Unknown instruction"); // Affiche une erreur pour instruction inconnue
+        Error("Instruction inconnue"); // Affiche une erreur pour instruction inconnue
     }
 }
 
@@ -277,14 +277,14 @@ void Inst()
 void Cond()
 {
     Exp(); // Analyse une expression
-    CODES_LEX t = SYM_COUR.CODE; // Sauvegarde l'opérateur relationnel
-    if (t == EGAL_TOKEN || t == DIFF_TOKEN ||
-        t == INF_TOKEN || t == INFEG_TOKEN ||
-        t == SUP_TOKEN || t == SUPEG_TOKEN)
+    CODES_LEX cl = SYM_COUR.CODE; // Sauvegarde l'opérateur relationnel
+    if (cl == EGAL_TOKEN || cl == DIFF_TOKEN ||
+        cl == INF_TOKEN || cl == INFEG_TOKEN ||
+        cl == SUP_TOKEN || cl == SUPEG_TOKEN)
     {
-        Test_Symbole(t); // Consomme l'opérateur
+        Test_Symbole(cl); // Consomme l'opérateur
         Exp();      // Analyse l'expression après l'opérateur
-        switch (t)
+        switch (cl)
         {
         case EGAL_TOKEN:
             GENERER1(EQL); // Génère l'instruction d'égalité
@@ -310,7 +310,7 @@ void Cond()
     }
     else
     {
-        Error("Relational operator expected"); // Erreur si opérateur non trouvé
+        Error("Opérateur relationnel attendu!"); // Erreur si opérateur non trouvé
     }
 }
 
@@ -322,10 +322,10 @@ void Exp()
     Term(); // Analyse un terme
     while (SYM_COUR.CODE == PLUS_TOKEN || SYM_COUR.CODE == MOINS_TOKEN)
     {
-        CODES_LEX t = SYM_COUR.CODE;
-        Test_Symbole(t); // Consomme l'opérateur + ou -
+        CODES_LEX cl = SYM_COUR.CODE;
+        Test_Symbole(cl); // Consomme l'opérateur + ou -
         Term();     // Analyse le terme suivant
-        if (t == PLUS_TOKEN)
+        if (cl == PLUS_TOKEN)
             GENERER1(ADD); // Génère l'instruction d'addition
         else
             GENERER1(SUB); // Génère l'instruction de soustraction
@@ -340,10 +340,10 @@ void Term()
     Fact(); // Analyse un facteur
     while (SYM_COUR.CODE == MULTI_TOKEN || SYM_COUR.CODE == DIV_TOKEN)
     {
-        CODES_LEX t = SYM_COUR.CODE;
-        Test_Symbole(t); // Consomme * ou /
+        CODES_LEX cl = SYM_COUR.CODE;
+        Test_Symbole(cl); // Consomme * ou /
         Fact();     // Analyse le facteur suivant
-        if (t == MULTI_TOKEN)
+        if (cl == MULTI_TOKEN)
             GENERER1(MUL); // Génère l'instruction de multiplication
         else
             GENERER1(DIVI); // Génère l'instruction de division entière
@@ -435,32 +435,32 @@ void Fact()
                 }
                 else
                 {
-                    Error("Unsupported constant type in Fact()");
+                    Error("type de constante insupporté");
                 }
             }
             else
             {
                 // Si l'identifiant est inconnu
-                Error("Unknown identifier in Fact()");
+                Error("Identifiant inconnu");
             }
         }
     }
     break;
 
-    case NUM_TOKEN:
+    case ENT_TOKEN:
     {
         // Nombre entier littéral
         int v = atoi(SYM_COUR.nom);
-        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(ENT_TOKEN);
         GENERER2(LDI, v);
     }
     break;
 
-    case REAL_TOKEN:
+    case FLOAT_TOKEN:
     {
         // Nombre réel littéral
         float vf = atof(SYM_COUR.nom);
-        Test_Symbole(REAL_TOKEN);
+        Test_Symbole(FLOAT_TOKEN);
         int int_repr;
         memcpy(&int_repr, &vf, sizeof(float));
         GENERER2(LDF, int_repr);
@@ -475,7 +475,7 @@ void Fact()
         break;
 
     default:
-        Error("Invalid factor"); // Erreur si facteur invalide
+        Error("Facteur invalide"); // Erreur si facteur invalide
         break;
     }
 }
@@ -500,7 +500,7 @@ void ForInst()
 {
     Test_Symbole(FOR_TOKEN); // Consomme "for"
     if (SYM_COUR.CODE != ID_TOKEN)
-        Error("Identifier expected after FOR");
+        Error("Identifiant attendu après FOR");
     char varFor[32];
     strcpy(varFor, SYM_COUR.nom); // Sauvegarde le nom de la variable de boucle
     Test_Symbole(ID_TOKEN);
@@ -522,7 +522,7 @@ void ForInst()
     }
     else
     {
-        Error("TO or DOWNTO expected"); // Erreur si ni "to" ni "downto"
+        Error("TO ou DOWNTO attendu"); // Erreur si ni "to" ni "downto"
     }
 
     Exp(); // Analyse l'expression de la limite
@@ -572,10 +572,10 @@ void CaseInst()
     int nEnd = 0;          // Compteur de labels de fin
 
     // Traite chaque branche "valeur : instruction"
-    while (SYM_COUR.CODE == NUM_TOKEN)
+    while (SYM_COUR.CODE == ENT_TOKEN)
     {
         int labelVal = atoi(SYM_COUR.nom); // Convertit le numéro de label en entier
-        Test_Symbole(NUM_TOKEN);
+        Test_Symbole(ENT_TOKEN);
         Test_Symbole(COLON_TOKEN);
 
         GENERER2(LDA, tmpSlot); // Recharge la valeur stockée
@@ -873,7 +873,7 @@ static void parseArguments(int indexProcFunc)
         char buf[128];
         sprintf(buf, "Incorrect number of parameters. Expected %d, got %d",
                 nbParams, count);
-        Error(buf); // Affiche une erreur en cas de désaccord
+        Error(buf);
     }
 
     // Pousse le nombre d'arguments sur la pile pour l'appel

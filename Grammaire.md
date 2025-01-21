@@ -101,12 +101,13 @@ FACT -> ID [ "(" EXPR { "," EXPR } ")" ]
       | "(" EXPR ")"
 ```
 
-### Listes et Types de Base
+### Liste et Types de Base
 ```
 EXPR_LIST -> EXPR { "," EXPR }
 IDENT_LIST -> ID { "," ID }
 ARG_LIST -> EXPR { "," EXPR }
-BASE_TYPE -> "integer" | "real" | "boolean" | "string"
+ARRAY_LIST -> ID "=" "[" REAL { "," REAL } "]" 
+BASE_TYPE -> "integer" | "real" | "boolean" | "string" | "array"
 ```
 
 ### Définitions Lexicales

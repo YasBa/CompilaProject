@@ -101,12 +101,13 @@ FACT -> ID [ "(" EXPR { "," EXPR } ")" ]
       | "(" EXPR ")"
 ```
 
-### Listes et Types de Base
+### Liste et Types de Base
 ```
 EXPR_LIST -> EXPR { "," EXPR }
 IDENT_LIST -> ID { "," ID }
 ARG_LIST -> EXPR { "," EXPR }
-BASE_TYPE -> "integer" | "real" | "boolean" | "string"
+ARRAY_LIST -> ID "=" "[" REAL { "," REAL } "]" 
+BASE_TYPE -> "integer" | "real" | "boolean" | "string" | "array"
 ```
 
 ### Définitions Lexicales
@@ -118,3 +119,59 @@ REAL -> NUM "." NUM
 lettre -> "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
 chiffre -> "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
 ```
+
+# Grammaire et Mnémoniques du P-CODE
+
+## **Grammaire**
+
+| **Non-Terminal** | **Production**                                                                                 |
+|------------------|-----------------------------------------------------------------------------------------------|
+| **PCODE**        | `PCODE ::= INT NUM {INST_PCODE} HLT`                                                         |
+| **INST_PCODE**   | `INST_PCODE ::= ADD | SUB | EQL | ... | [LDA | BZE | BRN | LDI] NUM`                          |
+| **NUM**          | `NUM ::= CHIFFRE {CHIFFRE}`                                                                   |
+| **CHIFFRE**      | `CHIFFRE ::= 1 | 2 | 3 | ... | 9`                                                             |
+
+### **Résumé de la Grammaire**
+- Un programme P-CODE suit la structure :
+  - Initialisation avec `INT NUM`
+  - Une séquence d’instructions `{INST_PCODE}`
+  - Arrêt avec `HLT`
+- Les instructions peuvent inclure des opérations mathématiques (`ADD`, `SUB`), des comparaisons (`EQL`), et des contrôles (`BZE`, `BRN`).
+- Les nombres sont composés d’un ou plusieurs chiffres entre 1 et 9.
+
+---
+
+## **Terminaux et Non-Terminaux**
+
+| **Catégorie**    | **Symboles**                                                                                  |
+|------------------|-----------------------------------------------------------------------------------------------|
+| **Terminaux**    | `INT`, `HLT`, `ADD`, `SUB`, `EQL`, `LDA`, `BZE`, `BRN`, `LDI`, `NUM`, `CHIFFRE`, `1` à `9`     |
+| **Non-terminaux**| `PCODE`, `INST_PCODE`, `NUM`, `CHIFFRE`                                                       |
+
+---
+
+## **Mnémoniques**
+
+| **Instruction** | **Description**                                                                                 |
+|------------------|-----------------------------------------------------------------------------------------------|
+| **ADD**         | Additionne le sous-sommet de pile et le sommet, laisse le résultat au sommet (idem pour `SUB`, `MUL`, `DIV`). |
+| **EQL**         | Laisse 1 au sommet de pile si sous-sommet = sommet, 0 sinon (idem pour `NEQ`, `GTR`, `LSS`, `GEQ`, `LEQ`). |
+| **PRN**         | Imprime le sommet, dépile.                                                                     |
+| **INN**         | Lit un entier, le stocke à l'adresse trouvée au sommet de pile, dépile.                        |
+| **INT c**       | Incrémente de la constante `c` le pointeur de pile (la constante `c` peut être négative).       |
+| **LDI v**       | Empile la valeur `v`.                                                                          |
+| **LDA a**       | Empile l'adresse `a`.                                                                          |
+| **LDV**         | Remplace le sommet par la valeur trouvée à l'adresse indiquée par le sommet (déréférence).      |
+| **STO**         | Stocke la valeur au sommet à l'adresse indiquée par le sous-sommet, dépile 2 fois.             |
+| **BRN i**       | Branchement inconditionnel à l'instruction `i`.                                                |
+| **BZE i**       | Branchement à l'instruction `i` si le sommet = 0, dépile.                                      |
+| **HLT**         | Halte.                                                                                         |
+
+---
+
+## **Résumé**
+
+Cette grammaire et ces mnémoniques définissent un langage P-CODE avec :
+- Une structure fixe incluant initialisation (`INT`), instructions, et fin (`HLT`).
+- Un ensemble d'instructions permettant des calculs, des comparaisons, et des contrôles.
+- Une distinction claire entre **terminaux** (éléments lexicaux du langage) et **non-terminaux** (éléments syntaxiques définissant la structure).

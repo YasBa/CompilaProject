@@ -418,6 +418,22 @@ void Fact()
         Test_Symbole(PRD_TOKEN);
         break;
 
+    case ARRAY_TOKEN:
+        Sym_Suiv();
+        Test_Symbole(EGAL_TOKEN);
+
+        Test_Symbole(SQUARE_BRACKET_OPEN_TOKEN);
+        Test_Symbole(FLOAT_TOKEN);
+        while (SYM_COUR.CODE == VIR_TOKEN)
+        {
+            Sym_Suiv();
+            Test_Symbole(FLOAT_TOKEN);
+        }
+        Test_Symbole(SQUARE_BRACKET_CLOSE_TOKEN);
+
+        Test_Symbole(PV_TOKEN);
+        break;
+
     default:
         Error("Facteur invalide");
         break;

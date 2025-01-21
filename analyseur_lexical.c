@@ -86,6 +86,7 @@ static void lireMot()
     else if (!strcmp(SYM_COUR.nom, "real"))      SYM_COUR.CODE= FLOAT_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "boolean"))   SYM_COUR.CODE= BOOL_TOKEN;
     else if (!strcmp(SYM_COUR.nom, "string"))    SYM_COUR.CODE= STRING_TOKEN;
+    else if (!strcmp(SYM_COUR.nom, "array"))     SYM_COUR.CODE= ARRAY_TOKEN;
     else                                         SYM_COUR.CODE= ID_TOKEN;
 }
 

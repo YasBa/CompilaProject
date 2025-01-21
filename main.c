@@ -40,15 +40,15 @@ int main(int argc, char* argv[])
     }
 
     // Affiche un message de succès de compilation et le nombre d'instructions générées.
-    printf("Compilation successful. PC=%d\n", PC);
-    afficherPCode(); // Affiche le P-code généré pour le débogage
+    printf("Compilation reussie.");
+    // afficherPCode(); // Affiche le P-code généré pour le débogage
 
     // Si un deuxième argument est fourni, sauvegarde le P-code dans un fichier,
     // puis recharge le P-code depuis ce fichier.
     if(argc > 2){
-        sauvegarderPCode(argv[2]);  // Sauvegarde le P-code dans le fichier spécifié
+        SavePCodeToFile(argv[2]);  // Sauvegarde le P-code dans le fichier spécifié
         fclose(fsource);            // Ferme le fichier source
-        chargerPCode(argv[2]);      // Recharge le P-code à partir du fichier
+        // chargerPCode(argv[2]);      // Recharge le P-code à partir du fichier
     } else {
         fclose(fsource);            // Ferme le fichier source s'il n'y a pas de sauvegarde
     }

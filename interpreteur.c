@@ -28,6 +28,10 @@ static void INTER_INST(INSTRUCTION inst)
     // Selon le mnémonique de l'instruction, on fait différentes actions
     switch (inst.MNE)
     {
+    case INT:
+        OFFSET = SP = inst.SUITE;
+        PC++;
+        break;
     case LDI:
         // LDI : Pousse une valeur littérale entière sur la pile.
         SP++;
@@ -396,5 +400,5 @@ void INTER_PCODE()
     {
         INTER_INST(PCODE[PCi]);
     }
-    printf("End of execution (HLT).\n");
+    printf("Fin d'execution.\n");
 }

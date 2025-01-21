@@ -20,18 +20,20 @@ void GENERER2(Mnemoniques M, int arg);
 // afficherPCode : affiche toutes les instructions du P-code
 // ---------------------------------------------------------------------
 // Affiche le contenu du tableau global PCODE pour voir le programme généré
-void afficherPCode();
+// void afficherPCode();
 
 // ---------------------------------------------------------------------
-// sauvegarderPCode : sauvegarde le P-code dans un fichier
+// SavePCodeToFile : sauvegarde le P-code dans un fichier
 // ---------------------------------------------------------------------
-// Paramètre filename : le nom du fichier où enregistrer le P-code
-void sauvegarderPCode(const char* filename);
+// Paramètre FICH_SORTIE : le nom du fichier où enregistrer le P-code
+void SavePCodeToFile(const char* FICH_SORTIE);
+void SaveInstToFile(FILE *FICH_SORTIE, INSTRUCTION INST);
+
 
 // ---------------------------------------------------------------------
 // chargerPCode : charge le P-code depuis un fichier
 // ---------------------------------------------------------------------
-// Paramètre filename : le nom du fichier à partir duquel charger le P-code
-void chargerPCode(const char* filename);
+// Paramètre FICH_SORTIE : le nom du fichier à partir duquel charger le P-code
+void chargerPCode(const char* FICH_SORTIE);
 
 #endif

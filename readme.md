@@ -177,7 +177,7 @@ Cette grammaire et ces mnémoniques définissent un langage P-CODE avec :
 - Une distinction claire entre **terminaux** (éléments lexicaux du langage) et **non-terminaux** (éléments syntaxiques définissant la structure).
 
 ---
-# **Try it urself**
+# **Try it urself (pulliw b3da)**
 
 ```
 //compile

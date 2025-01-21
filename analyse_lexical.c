@@ -242,7 +242,7 @@ void SymSuiv()
             // Si aucun cas ne correspond, c'est un caractère inconnu
             SYM_COUR.CODE = ERREUR_TOKEN;
             sprintf(SYM_COUR.nom, "%c", car_cour);
-            Error("Unknown character");
+            Error("caractère inconnu");
             break;
         }
     }
@@ -257,7 +257,7 @@ void Test_Symbole (CODES_LEX cl)
     }
     else {
         char buf[128];
-        sprintf(buf, "Unexpected token. Expected %d, found %d", cl, SYM_COUR.CODE);
+        sprintf(buf, "Jeton inattendu. Attendu %d, trouvé %d", cl, SYM_COUR.CODE);
         Error(buf);  // Affiche une erreur si le token ne correspond pas
     }
 }

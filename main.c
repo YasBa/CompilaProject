@@ -8,7 +8,7 @@
 int main(int argc, char* argv[])
 {
     if(argc < 2){
-        printf("Usage: %s <source_file> [pcode_file]\n", argv[0]);
+        printf("Usage: %s <fichier_source> [pcode_file]\n", argv[0]);
         return 1;
     }
 

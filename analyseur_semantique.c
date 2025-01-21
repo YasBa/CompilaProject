@@ -248,8 +248,6 @@ void VarDecl()
             TAB_IDFS[NBR_IDFS].type = declaredType;
 
             TAB_IDFS[NBR_IDFS].Adresse = OFFSET++;
-            printf("Variable déclarée: %s, Type: %d, Adresse: %d\n",
-                   TAB_IDFS[NBR_IDFS].Nom, TAB_IDFS[NBR_IDFS].type, TAB_IDFS[NBR_IDFS].Adresse);
             NBR_IDFS++;
         }
     }

@@ -175,3 +175,14 @@ Cette grammaire et ces mnémoniques définissent un langage P-CODE avec :
 - Une structure fixe incluant initialisation (`INT`), instructions, et fin (`HLT`).
 - Un ensemble d'instructions permettant des calculs, des comparaisons, et des contrôles.
 - Une distinction claire entre **terminaux** (éléments lexicaux du langage) et **non-terminaux** (éléments syntaxiques définissant la structure).
+
+---
+# **Try it urself**
+
+```
+//compile
+gcc -o main.exe .\main.c .\analyseur_lexical.c .\analyseur_syntaxique.c .\analyseur_semantique.c .\interpreteur.c .\generation_code.c
+
+//execute
+.\main.exe .\TESTS\smit_test .\PCODE.po
+```

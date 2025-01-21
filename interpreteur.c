@@ -326,5 +326,5 @@ void INTER_PCODE()
     {
         INTER_INST(PCODE[PCi]);
     }
-    printf("\nFin d'execution. (Pas d'erreurs)\n");
+    printf("\nExecution reussie SANS erreurs\n");
 }

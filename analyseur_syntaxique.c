@@ -419,14 +419,14 @@ void Fact()
         break;
 
     case ARRAY_TOKEN:
-        Sym_Suiv();
+        SymSuiv();
         Test_Symbole(EGAL_TOKEN);
 
         Test_Symbole(SQUARE_BRACKET_OPEN_TOKEN);
         Test_Symbole(FLOAT_TOKEN);
         while (SYM_COUR.CODE == VIR_TOKEN)
         {
-            Sym_Suiv();
+            SymSuiv();
             Test_Symbole(FLOAT_TOKEN);
         }
         Test_Symbole(SQUARE_BRACKET_CLOSE_TOKEN);

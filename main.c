@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    printf("\nCompilation reussie. \n");
+    printf("\nCompilation reussie SANS erreurs. \n");
 
     if(argc > 2){
         SavePCodeToFile(argv[2]);

@@ -1,5 +1,5 @@
-#ifndef GENERATION_PCODE_H
-#define GENERATION_PCODE_H
+#ifndef GENERATION_CODE_H
+#define GENERATION_CODE_H
 
 #include "commun.h"
 

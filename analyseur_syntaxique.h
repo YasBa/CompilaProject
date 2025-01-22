@@ -1,5 +1,5 @@
-#ifndef SYNTAXIQUE_H
-#define SYNTAXIQUE_H
+#ifndef ANALYSEUR_SYNTAXIQUE_H
+#define ANALYSEUR_SYNTAXIQUE_H
 
 void Program();
 void Bloc();

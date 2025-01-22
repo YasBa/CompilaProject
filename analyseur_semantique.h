@@ -1,5 +1,5 @@
-#ifndef SEMANTIQUE_H
-#define SEMANTIQUE_H
+#ifndef ANALYSEUR_SEMANTIQUE_H
+#define ANALYSEUR_SEMANTIQUE_H
 
 #include "commun.h"
 

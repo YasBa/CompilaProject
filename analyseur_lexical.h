@@ -1,5 +1,5 @@
-#ifndef ANALYSE_LEXICAL_H
-#define ANALYSE_LEXICAL_H
+#ifndef ANALYSEUR_LEXICAL_H
+#define ANALYSEUR_LEXICAL_H
 
 #include "commun.h"
 

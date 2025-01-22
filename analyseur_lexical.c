@@ -8,7 +8,7 @@ int       line_num = 1;
 
 void Error(const char* msg)
 {
-    fprintf(stderr, "Erreur ligne %d: %s (dernier token: '%s')\n",line_num, msg, SYM_COUR.nom);
+    fprintf(stderr, "Erreur : %s\nLigne : %d\n",msg , line_num);
     exit(EXIT_FAILURE);
 }
 
